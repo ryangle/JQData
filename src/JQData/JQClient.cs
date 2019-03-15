@@ -13,11 +13,13 @@ namespace JQData
     {
         public static HttpClient HttpClient;
         private string _baseUrl = "https://dataapi.joinquant.com/apis";
+        private bool _autoSleep = true;
 
-        public JQClient()
+        public JQClient(bool autoSleep = true)
         {
             HttpClient = new HttpClient();
             HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _autoSleep = autoSleep;
         }
 
         public string Token { set; get; }
@@ -92,7 +94,7 @@ namespace JQData
         /// <param name="unit">bar的时间单位, 支持如下周期：1m, 5m, 15m, 30m, 60m, 120m, 1d, 1w, 1M</param>
         /// <param name="end_date"></param>
         /// <param name="fq_ref_date"></param>
-        public string[] GetPrice(string code, int count, string unit, string end_date, string fq_ref_date)
+        public Bar[] GetPrice(string code, int count, string unit, string end_date, string fq_ref_date)
         {
             string body = JsonConvert.SerializeObject(new
             {
@@ -108,11 +110,34 @@ namespace JQData
             var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
             var securityInfo = resultReq.Content.ReadAsStringAsync().Result;
             Sleep();
-            return securityInfo.Split('\n');
+            var barStrs = securityInfo.Split('\n');
+
+            var bars = new List<Bar>();
+            foreach (var barstr in barStrs)
+            {
+                var bar = barstr.Split(',');
+                bars.Add(new Bar
+                {
+                    Date = bar[0],
+                    Open = double.Parse(bar[1]),
+                    Close = double.Parse(bar[2]),
+                    High = double.Parse(bar[3]),
+                    Low = double.Parse(bar[4]),
+                    Volume = double.Parse(bar[5]),
+                    Money = double.Parse(bar[6])
+                });
+            }
+            return bars.ToArray();
         }
+        /// <summary>
+        /// 每2秒一次请求，否则会限制访问
+        /// </summary>
         private void Sleep()
         {
-            Thread.Sleep(2000);
+            if (_autoSleep)
+            {
+                Thread.Sleep(2000);
+            }
         }
     }
 }
