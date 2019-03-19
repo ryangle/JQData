@@ -24,7 +24,7 @@ namespace JQData
 
         public string Token { set; get; }
         /// <summary>
-        /// 
+        /// 获取访问令牌
         /// </summary>
         /// <param name="mob">mob是申请JQData时所填写的手机号</param>
         /// <param name="pwd">Password为聚宽官网登录密码，新申请用户默认为手机号后6位</param>
@@ -85,7 +85,7 @@ namespace JQData
             return result.ToArray();
         }
         /// <summary>
-        /// 
+        /// 获取历史行情
         /// </summary>
         /// <param name="code"></param>
         /// <param name="count"></param>
@@ -109,10 +109,18 @@ namespace JQData
             var securityInfo = resultReq.Content.ReadAsStringAsync().Result;
             var barStrs = securityInfo.Split('\n');
 
-            var bars = new List<Bar>();
-            foreach (var barstr in barStrs)
+            if (barStrs.Length > 0)
             {
-                var bar = barstr.Split(',');
+                if (!barStrs[0].StartsWith("date,open,close,high,low,volume,money"))
+                {
+                    throw new Exception(barStrs[0]);
+                }
+            }
+
+            var bars = new List<Bar>();
+            for (int i = 1; i < barStrs.Length; i++)
+            {
+                var bar = barStrs[i].Split(',');
                 bars.Add(new Bar
                 {
                     Date = bar[0],
