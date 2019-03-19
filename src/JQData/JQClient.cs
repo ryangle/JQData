@@ -13,13 +13,13 @@ namespace JQData
     {
         public static HttpClient HttpClient;
         private string _baseUrl = "https://dataapi.joinquant.com/apis";
-        private bool _autoSleep = true;
-
-        public JQClient(bool autoSleep = true)
+        /// <summary>
+        /// 每2秒一次请求，否则会限制访问
+        /// </summary>
+        public JQClient()
         {
             HttpClient = new HttpClient();
             HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _autoSleep = autoSleep;
         }
 
         public string Token { set; get; }
@@ -41,7 +41,6 @@ namespace JQData
             var content = new StringContent(json);
             var resultTok = HttpClient.PostAsync(_baseUrl, content).Result;
             Token = resultTok.Content.ReadAsStringAsync().Result;
-            Sleep();
             return Token;
         }
 
@@ -66,7 +65,6 @@ namespace JQData
             var bodyContent = new StringContent(body);
             var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
             var securityInfo = resultReq.Content.ReadAsStringAsync().Result;
-            Sleep();
             var securitiesStr = securityInfo.Split('\n');
             //跳过表头
             var result = new List<Security>();
@@ -109,7 +107,6 @@ namespace JQData
             var bodyContent = new StringContent(body);
             var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
             var securityInfo = resultReq.Content.ReadAsStringAsync().Result;
-            Sleep();
             var barStrs = securityInfo.Split('\n');
 
             var bars = new List<Bar>();
@@ -129,15 +126,20 @@ namespace JQData
             }
             return bars.ToArray();
         }
-        /// <summary>
-        /// 每2秒一次请求，否则会限制访问
-        /// </summary>
-        private void Sleep()
+
+        public string GetDominantFuture(string code, DateTime date)
         {
-            if (_autoSleep)
+            string body = JsonConvert.SerializeObject(new
             {
-                Thread.Sleep(2000);
-            }
+                method = "get_dominant_future",
+                token = Token,
+                code = code,
+                date = date.ToString("yyyy-MM-dd")
+            });
+            var bodyContent = new StringContent(body);
+            var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
+            var result = resultReq.Content.ReadAsStringAsync().Result;
+            return result;
         }
     }
 }
