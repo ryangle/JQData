@@ -45,14 +45,11 @@ namespace JQData
         }
 
         /// <summary>
-        /// code: 标的代码
-        /// display_name: 中文名称
-        /// name: 缩写简称
-        /// start_date: 上市日期
-        /// end_date: 退市日期，如果没有退市则为2200-01-01
-        /// type: 类型，stock(股票)，index(指数)，etf(ETF基金)，fja（分级A），fjb（分级B）
+        /// 获取所有标的信息
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="code">stock(股票)，fund,index(指数)，futures,etf(ETF基金)，lof,fja（分级A），fjb（分级B）</param>
+        /// <param name="date">为空表示所有日期的标的</param>
+        /// <returns></returns>
         public Security[] QueryAllSecurities(string code, string date)
         {
             string body = JsonConvert.SerializeObject(new
@@ -66,7 +63,15 @@ namespace JQData
             var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
             var securityInfo = resultReq.Content.ReadAsStringAsync().Result;
             var securitiesStr = securityInfo.Split('\n');
-            //跳过表头
+
+            if (securitiesStr.Length > 0)
+            {
+                if (!securitiesStr[0].StartsWith("code,display_name,name,start_date,end_date,type"))
+                {
+                    throw new Exception(securitiesStr[0]);
+                }
+            }
+
             var result = new List<Security>();
             for (int i = 1; i < securitiesStr.Length; i++)
             {
@@ -84,6 +89,44 @@ namespace JQData
             }
             return result.ToArray();
         }
+        /// <summary>
+        /// 获取单个标的信息
+        /// </summary>
+        /// <param name="code">stock(股票)，fund,index(指数)，futures,etf(ETF基金)，lof,fja（分级A），fjb（分级B）</param>
+        public Security GetSecurityInfo(string code)
+        {
+            string body = JsonConvert.SerializeObject(new
+            {
+                method = "get_security_info",
+                token = Token,
+                code = code
+            });
+            var bodyContent = new StringContent(body);
+            var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
+            var result = resultReq.Content.ReadAsStringAsync().Result;
+            var securitiesStr = result.Split('\n');
+
+            if (securitiesStr.Length > 0)
+            {
+                if (!securitiesStr[0].StartsWith("code,display_name,name,start_date,end_date,type"))
+                {
+                    throw new Exception(securitiesStr[0]);
+                }
+            }
+            var s = new Security();
+            if (securitiesStr.Length == 2)
+            {
+                var t = securitiesStr[1].Split(',');
+                s.Code = t[0];
+                s.DisplayName = t[1];
+                s.Name = t[2];
+                s.StartDate = t[3];
+                s.EndDate = t[4];
+                s.Type = t[5];
+            }
+            return s;
+        }
+
         /// <summary>
         /// 获取历史行情
         /// </summary>
@@ -134,7 +177,12 @@ namespace JQData
             }
             return bars.ToArray();
         }
-
+        /// <summary>
+        /// 获取主力合约
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
         public string GetDominantFuture(string code, DateTime date)
         {
             string body = JsonConvert.SerializeObject(new
@@ -149,5 +197,7 @@ namespace JQData
             var result = resultReq.Content.ReadAsStringAsync().Result;
             return result;
         }
+
+
     }
 }
