@@ -50,7 +50,7 @@ namespace JQData
         /// <param name="code">stock(股票)，fund,index(指数)，futures,etf(ETF基金)，lof,fja（分级A），fjb（分级B）</param>
         /// <param name="date">为空表示所有日期的标的</param>
         /// <returns></returns>
-        public Security[] QueryAllSecurities(string code, string date)
+        public Security[] GetAllSecurities(string code, string date)
         {
             string body = JsonConvert.SerializeObject(new
             {
