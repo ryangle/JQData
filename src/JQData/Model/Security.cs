@@ -30,5 +30,12 @@ namespace JQData.Model
         ///类型stock(股票)，index(指数)，etf(ETF基金)，fja（分级A），fjb（分级B）
         /// </summary>
         public string Type;
+
+        public readonly string Header = "code,display_name,name,start_date,end_date,type";
+
+        public override string ToString()
+        {
+            return $"{Code},{DisplayName},{Name},{StartDate},{EndDate},{Type}";
+        }
     }
 }
