@@ -20,5 +20,19 @@ namespace JQData.Model
         {
             return $"{Date},{Open},{Close},{High},{Low},{Volume},{Money}";
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            var item = obj as Bar;
+            if (item == null)
+            {
+                return false;
+            }
+            return item.Date == Date && item.Open == Open && item.Close == Close && item.High == High && item.Low == Low && item.Volume == Volume && item.Money == Money;
+        }
     }
 }
