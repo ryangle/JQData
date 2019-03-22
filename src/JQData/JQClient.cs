@@ -24,21 +24,28 @@ namespace JQData
         /// <returns></returns>
         public string GetToken(string mob, string pwd)
         {
-            _httpClient?.Dispose();
-
-            _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            string json = JsonConvert.SerializeObject(new
+            try
             {
-                method = "get_token",
-                mob = mob,
-                pwd = pwd
-            });
+                _httpClient?.Dispose();
 
-            var content = new StringContent(json);
-            var resultTok = _httpClient.PostAsync(_baseUrl, content).Result;
-            Token = resultTok.Content.ReadAsStringAsync().Result;
+                _httpClient = new HttpClient();
+                _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                string json = JsonConvert.SerializeObject(new
+                {
+                    method = "get_token",
+                    mob = mob,
+                    pwd = pwd
+                });
+
+                var content = new StringContent(json);
+                var resultTok = _httpClient.PostAsync(_baseUrl, content).Result;
+                Token = resultTok.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return Token;
         }
 
