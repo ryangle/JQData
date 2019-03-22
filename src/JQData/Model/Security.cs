@@ -27,7 +27,7 @@ namespace JQData.Model
         /// </summary>
         public string EndDate;
         /// <summary>
-        ///类型stock(股票)，index(指数)，etf(ETF基金)，fja（分级A），fjb（分级B）
+        ///类型stock(股票)，index(指数)，etf(交易所交易型基金)，fja（分级A），fjb（分级B）
         /// </summary>
         public string Type;
 

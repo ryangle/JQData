@@ -13,5 +13,12 @@ namespace JQData.Model
         public double Low;
         public double Volume;
         public double Money;
+
+        public readonly string Header = "date,open,close,high,low,volume,money";
+
+        public override string ToString()
+        {
+            return $"{Date},{Open},{Close},{High},{Low},{Volume},{Money}";
+        }
     }
 }
