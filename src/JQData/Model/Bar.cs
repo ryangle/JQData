@@ -34,5 +34,10 @@ namespace JQData.Model
             }
             return item.Date == Date && item.Open == Open && item.Close == Close && item.High == High && item.Low == Low && item.Volume == Volume && item.Money == Money;
         }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
     }
 }
