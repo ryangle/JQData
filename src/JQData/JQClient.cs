@@ -4,23 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading;
 
 namespace JQData
 {
+    /// <summary>
+    /// 每2秒一次请求，否则会限制访问
+    /// </summary>
     public class JQClient
     {
-        public static HttpClient HttpClient;
+        private HttpClient _httpClient;
         private string _baseUrl = "https://dataapi.joinquant.com/apis";
-        /// <summary>
-        /// 每2秒一次请求，否则会限制访问
-        /// </summary>
-        public JQClient()
-        {
-            HttpClient = new HttpClient();
-            HttpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
 
         public string Token { set; get; }
         /// <summary>
@@ -31,6 +24,11 @@ namespace JQData
         /// <returns></returns>
         public string GetToken(string mob, string pwd)
         {
+            _httpClient?.Dispose();
+
+            _httpClient = new HttpClient();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
             string json = JsonConvert.SerializeObject(new
             {
                 method = "get_token",
@@ -39,7 +37,7 @@ namespace JQData
             });
 
             var content = new StringContent(json);
-            var resultTok = HttpClient.PostAsync(_baseUrl, content).Result;
+            var resultTok = _httpClient.PostAsync(_baseUrl, content).Result;
             Token = resultTok.Content.ReadAsStringAsync().Result;
             return Token;
         }
@@ -60,7 +58,7 @@ namespace JQData
                 date = date,
             });
             var bodyContent = new StringContent(body);
-            var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
+            var resultReq = _httpClient.PostAsync(_baseUrl, bodyContent).Result;
             var securityInfo = resultReq.Content.ReadAsStringAsync().Result;
             var securitiesStr = securityInfo.Split('\n');
 
@@ -102,7 +100,7 @@ namespace JQData
                 code = code
             });
             var bodyContent = new StringContent(body);
-            var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
+            var resultReq = _httpClient.PostAsync(_baseUrl, bodyContent).Result;
             var result = resultReq.Content.ReadAsStringAsync().Result;
             var securitiesStr = result.Split('\n');
 
@@ -148,7 +146,7 @@ namespace JQData
                 fq_ref_date = fq_ref_date
             });
             var bodyContent = new StringContent(body);
-            var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
+            var resultReq = _httpClient.PostAsync(_baseUrl, bodyContent).Result;
             var securityInfo = resultReq.Content.ReadAsStringAsync().Result;
             var barStrs = securityInfo.Split('\n');
 
@@ -193,7 +191,7 @@ namespace JQData
                 date = date.ToString("yyyy-MM-dd")
             });
             var bodyContent = new StringContent(body);
-            var resultReq = HttpClient.PostAsync(_baseUrl, bodyContent).Result;
+            var resultReq = _httpClient.PostAsync(_baseUrl, bodyContent).Result;
             var result = resultReq.Content.ReadAsStringAsync().Result;
             return result;
         }
