@@ -202,7 +202,5 @@ namespace JQData
             var result = resultReq.Content.ReadAsStringAsync().Result;
             return result;
         }
-
-
     }
 }
