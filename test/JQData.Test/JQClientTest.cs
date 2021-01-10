@@ -27,7 +27,7 @@ namespace JQData.Test
         [Fact]
         public void GetPriceTest()
         {
-            var bars = _jqclient.GetPrice("RB1507.XSGE", 5000, "1m", "2014-07-31", "");
+            var bars = _jqclient.GetPrice("A8888.XDCE", 5000, "1m", "2014-07-31", "");
 
         }
     }

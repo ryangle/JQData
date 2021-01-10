@@ -9,6 +9,7 @@ namespace JQData
 {
     /// <summary>
     /// 每2秒一次请求，否则会限制访问
+    /// webapi使用文档：https://dataapi.joinquant.com/docs
     /// </summary>
     public class JQClient
     {
@@ -17,7 +18,7 @@ namespace JQData
 
         public string Token { set; get; }
         /// <summary>
-        /// 获取访问令牌
+        /// 获取用户凭证
         /// </summary>
         /// <param name="mob">mob是申请JQData时所填写的手机号</param>
         /// <param name="pwd">Password为聚宽官网登录密码，新申请用户默认为手机号后6位</param>
