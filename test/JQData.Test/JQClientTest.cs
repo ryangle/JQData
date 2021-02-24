@@ -1,5 +1,5 @@
 //-----------------------------------------------------------------------
-// <copyright file="JQClient.cs" Author="ryangle">
+// <copyright file="JQClientTest.cs" Author="ryangle">
 // https://github.com/ryangle/JQData
 // </copyright>
 //-----------------------------------------------------------------------
@@ -21,6 +21,12 @@ namespace JQData.Test
             Configuration = builder.Build();
             _jqclient = new JQClient();
             _jqclient.GetToken(Configuration["JQUser"], Configuration["JQPassword"]);
+        }
+        [Fact]
+        public void GetQueryCountTest()
+        {
+            var count = _jqclient.GetQueryCount();
+            Assert.IsType<int>(count);
         }
         [Fact]
         public void GetDominantFutureTest()

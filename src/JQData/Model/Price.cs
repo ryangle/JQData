@@ -1,26 +1,20 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Bar.cs" Author="ryangle">
+// <copyright file="Price.cs" Author="ryangle">
 // https://github.com/ryangle/JQData
 // </copyright>
 //-----------------------------------------------------------------------
 
 namespace JQData.Model
 {
-    public class Bar
+    public class Price
     {
-        public string Date;
-        public double Open;
-        public double Close;
-        public double High;
-        public double Low;
-        public double Volume;
-        public double Money;
+        public string Code;
+        public double Current;
 
-        public readonly string Header = "date,open,close,high,low,volume,money";
-
+        public readonly string Header = "code,current";
         public override string ToString()
         {
-            return $"{Date},{Open},{Close},{High},{Low},{Volume},{Money}";
+            return $"{Code},{Current}";
         }
 
         public override bool Equals(object obj)
@@ -29,12 +23,12 @@ namespace JQData.Model
             {
                 return false;
             }
-            var item = obj as Bar;
+            var item = obj as Price;
             if (item == null)
             {
                 return false;
             }
-            return item.Date == Date && item.Open == Open && item.Close == Close && item.High == High && item.Low == Low && item.Volume == Volume && item.Money == Money;
+            return item.Code == Code && item.Current == Current;
         }
 
         public override int GetHashCode()

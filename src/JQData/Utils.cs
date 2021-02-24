@@ -1,11 +1,8 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="JQClient.cs" Author="ryangle">
+// <copyright file="Utils.cs" Author="ryangle">
 // https://github.com/ryangle/JQData
 // </copyright>
 //-----------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace JQData
 {
