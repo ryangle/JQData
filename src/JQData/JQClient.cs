@@ -4,17 +4,17 @@
 // </copyright>
 //-----------------------------------------------------------------------
 using JQData.Model;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace JQData
 {
     /// <summary>
     /// 每2秒一次请求，否则会限制访问
-    /// webapi使用文档：https://dataapi.joinquant.com/docs
+    /// webapi使用文档：https://www.joinquant.com/help/api/help#name:JQDataHttp
     /// </summary>
     public class JQClient
     {
@@ -40,7 +40,7 @@ namespace JQData
                 _httpClient = new HttpClient();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                string json = JsonConvert.SerializeObject(new
+                string json = JsonSerializer.Serialize(new
                 {
                     method = "get_token",
                     mob = mob,
@@ -51,9 +51,9 @@ namespace JQData
                 var resultTok = _httpClient.PostAsync(_baseUrl, content).Result;
                 Token = resultTok.Content.ReadAsStringAsync().Result;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             return Token;
         }
@@ -73,7 +73,7 @@ namespace JQData
                 _httpClient = new HttpClient();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                string json = JsonConvert.SerializeObject(new
+                string json = JsonSerializer.Serialize(new
                 {
                     method = "get_current_token",
                     mob = mob,
@@ -84,9 +84,9 @@ namespace JQData
                 var resultTok = _httpClient.PostAsync(_baseUrl, content).Result;
                 Token = resultTok.Content.ReadAsStringAsync().Result;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
             return Token;
         }
@@ -107,7 +107,7 @@ namespace JQData
         /// <returns></returns>
         public Security[] GetAllSecurities(string code, string date)
         {
-            string body = JsonConvert.SerializeObject(new
+            string body = JsonSerializer.Serialize(new
             {
                 method = "get_all_securities",
                 token = Token,
@@ -151,7 +151,7 @@ namespace JQData
         /// <param name="code">stock(股票)，fund,index(指数)，futures,etf(ETF基金)，lof,fja（分级A），fjb（分级B）</param>
         public Security GetSecurityInfo(string code)
         {
-            string body = JsonConvert.SerializeObject(new
+            string body = JsonSerializer.Serialize(new
             {
                 method = "get_security_info",
                 token = Token,
@@ -194,7 +194,7 @@ namespace JQData
         /// <param name="fq_ref_date"></param>
         public Bar[] GetPrice(string code, int count, string unit, string end_date, string fq_ref_date)
         {
-            string body = JsonConvert.SerializeObject(new
+            string body = JsonSerializer.Serialize(new
             {
                 method = "get_price",
                 token = Token,
@@ -498,7 +498,7 @@ namespace JQData
         /// <returns></returns>
         public string GetDominantFuture(string code, DateTime date)
         {
-            string body = JsonConvert.SerializeObject(new
+            string body = JsonSerializer.Serialize(new
             {
                 method = "get_dominant_future",
                 token = Token,

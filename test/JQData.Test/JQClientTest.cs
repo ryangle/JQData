@@ -1,3 +1,8 @@
+//-----------------------------------------------------------------------
+// <copyright file="JQClient.cs" Author="ryangle">
+// https://github.com/ryangle/JQData
+// </copyright>
+//-----------------------------------------------------------------------
 using Microsoft.Extensions.Configuration;
 using System;
 using Xunit;
