@@ -21,7 +21,9 @@ namespace JQData
     {
         private HttpClient _httpClient;
         private string _baseUrl = "https://dataapi.joinquant.com/apis";
-
+        /// <summary>
+        /// Token
+        /// </summary>
         public string Token { private set; get; }
         private string PostRequest(string body)
         {
@@ -127,7 +129,7 @@ namespace JQData
                 method = "get_all_securities",
                 Token,
                 code,
-                date,
+                date
             });
             var securityInfo = PostRequest(body);
             var securitiesStr = securityInfo.Split('\n');
@@ -513,10 +515,13 @@ namespace JQData
             return result;
         }
         /// <summary>
-        /// todo:获取基金净值/股票是否st/期货结算价和持仓量等
+        /// 获取基金净值/股票是否st/期货结算价和持仓量等
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
+        /// <param name="end_date"></param>
         /// <returns></returns>
-        public string GetExtras()
+        public string GetExtras(string code, string date, string end_date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -526,16 +531,21 @@ namespace JQData
             {
                 method = "get_extras",
                 Token,
+                code,
+                date,
+                end_date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:基金基础信息数据接口
+        /// 基金基础信息数据接口
         /// 获取单个基金的基本信息
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
-        public string GetFundInfo()
+        public string GetFundInfo(string code, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -545,16 +555,20 @@ namespace JQData
             {
                 method = "get_fund_info",
                 Token,
+                code,
+                date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取指数成份股
+        /// 获取指数成份股
         /// 获取一个指数给定日期在平台可交易的成分股列表
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
-        public string GetIndexStocks()
+        public string GetIndexStocks(string code, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -564,16 +578,20 @@ namespace JQData
             {
                 method = "get_index_stocks",
                 Token,
+                code,
+                date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取指数成份股权重（月度）
+        /// 获取指数成份股权重（月度）
         /// 获取指数成份股给定日期的权重数据，每月更新一次
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
-        public string GetIndexWeights()
+        public string GetIndexWeights(string code, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -583,16 +601,19 @@ namespace JQData
             {
                 method = "get_index_weights",
                 Token,
+                code,
+                date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取行业列表
+        /// 获取行业列表
         /// 按照行业分类获取行业列表
         /// </summary>
+        /// <param name="code"></param>
         /// <returns></returns>
-        public string GetIndestries()
+        public string GetIndestries(string code)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -602,15 +623,18 @@ namespace JQData
             {
                 method = "get_industries",
                 Token,
+                code
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:查询股票所属行业
+        /// 查询股票所属行业
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
-        public string GetIndustry()
+        public string GetIndustry(string code, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -620,16 +644,20 @@ namespace JQData
             {
                 method = "get_industry",
                 Token,
+                code,
+                date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取行业成份股
+        /// 获取行业成份股
         /// 获取在给定日期一个行业的所有股票
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
-        public string GetIndestryStocks()
+        public string GetIndestryStocks(string code, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -639,12 +667,14 @@ namespace JQData
             {
                 method = "get_industry_stocks",
                 Token,
+                code,
+                date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取概念列表
+        /// 获取概念列表
         /// 获取概念板块列表
         /// </summary>
         /// <returns></returns>
@@ -657,17 +687,19 @@ namespace JQData
             var body = JsonSerializer.Serialize(new
             {
                 method = "get_concepts",
-                Token,
+                Token
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取概念成份股
+        /// 获取概念成份股
         /// 获取在给定日期一个概念板块的所有股票
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
-        public string GetConceptStocks()
+        public string GetConceptStocks(string code, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -677,16 +709,22 @@ namespace JQData
             {
                 method = "get_concept_stocks",
                 Token,
+                code,
+                date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取资金流信息
+        /// 获取资金流信息
         /// 获取一只股票在一个时间段内的资金流向数据，仅包含股票数据，不可用于获取期货数据
         /// </summary>
         /// <returns></returns>
-        public string GetMoneyFlow()
+        /// <param name="code"></param>
+        /// <param name="date"></param>
+        /// <param name="end_date"></param>
+        /// <returns></returns>
+        public string GetMoneyFlow(string code, string date, string end_date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -696,16 +734,23 @@ namespace JQData
             {
                 method = "get_money_flow",
                 Token,
+                code,
+                date,
+                end_date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取龙虎榜数据
+        /// 获取龙虎榜数据
         /// run_query api 是模拟了JQDataSDK run_query方法获取财务、宏观、期权等数据 可查询的数据内容请查看JQData文档
         /// </summary>
+        /// <param name="table"></param>
+        /// <param name="columns"></param>
+        /// <param name="conditions"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        public string GetBillboardList()
+        public string GetBillboardList(string table, string columns, string conditions, int count)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -715,16 +760,23 @@ namespace JQData
             {
                 method = "run_query",
                 Token,
+                table,
+                columns,
+                conditions,
+                count
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取融资融券信息
+        /// 获取融资融券信息
         /// 获取一只股票在一个时间段内的融资融券信息
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
+        /// <param name="end_date"></param>
         /// <returns></returns>
-        public string GetMtss()
+        public string GetMtss(string code, string date, string end_date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -734,15 +786,19 @@ namespace JQData
             {
                 method = "get_mtss",
                 Token,
+                code,
+                date,
+                end_date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取融资标的列表
+        /// 获取融资标的列表
         /// </summary>
+        /// <param name="date"></param>
         /// <returns></returns>
-        public string GetMargincashStocks()
+        public string GetMargincashStocks(string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -752,6 +808,7 @@ namespace JQData
             {
                 method = "get_margincash_stocks",
                 Token,
+                date
             });
             var result = PostRequest(body);
             return result;
@@ -760,7 +817,7 @@ namespace JQData
         /// todo:获取融券标的列表
         /// </summary>
         /// <returns></returns>
-        public string GetMarginsecStocks()
+        public string GetMarginsecStocks(string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -770,16 +827,19 @@ namespace JQData
             {
                 method = "get_marginsec_stocks",
                 Token,
+                date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取限售解禁数据
+        /// 获取限售解禁数据
         /// 获取指定日期区间内的限售解禁数据
         /// </summary>
+        /// <param name="date"></param>
+        /// <param name="end_date"></param>
         /// <returns></returns>
-        public string GetLockedShares()
+        public string GetLockedShares(string date, string end_date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -789,16 +849,20 @@ namespace JQData
             {
                 method = "get_locked_shares",
                 Token,
+                date,
+                end_date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取指定范围交易日
+        /// 获取指定范围交易日
         /// 获取指定日期范围内的所有交易日
         /// </summary>
+        /// <param name="date"></param>
+        /// <param name="end_date"></param>
         /// <returns></returns>
-        public string GetTradeDays()
+        public string GetTradeDays(string date, string end_date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -808,12 +872,14 @@ namespace JQData
             {
                 method = "get_trade_days",
                 Token,
+                date,
+                end_date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取所有交易日
+        /// 获取所有交易日
         /// </summary>
         /// <returns></returns>
         public string GetAllTradeDays()
@@ -825,17 +891,19 @@ namespace JQData
             var body = JsonSerializer.Serialize(new
             {
                 method = "get_all_trade_days",
-                Token,
+                Token
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取期货可交易合约列表
+        /// 获取期货可交易合约列表
         /// 获取某期货品种在指定日期下的可交易合约标的列表
         /// </summary>
+        /// <param name="code"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
-        public string GetFutureContracts()
+        public string GetFutureContracts(string code, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -845,6 +913,8 @@ namespace JQData
             {
                 method = "get_future_contracts",
                 Token,
+                code,
+                date
             });
             var result = PostRequest(body);
             return result;
@@ -872,11 +942,15 @@ namespace JQData
             return result;
         }
         /// <summary>
-        /// todo:模拟JQDataSDK的run_query方法
+        /// 模拟JQDataSDK的run_query方法
         /// run_query api 是模拟了JQDataSDK run_query方法获取财务、宏观、期权等数据 
         /// </summary>
+        /// <param name="table"></param>
+        /// <param name="columns"></param>
+        /// <param name="conditions"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        public string RunQuery()
+        public string RunQuery(string table, string columns, string conditions, int count)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -886,16 +960,25 @@ namespace JQData
             {
                 method = "run_query",
                 Token,
+                table,
+                columns,
+                conditions,
+                count
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取基本财务数据
+        /// 获取基本财务数据
         /// 查询股票的市值数据、资产负债数据、现金流数据、利润数据、财务指标数据.
         /// </summary>
+        /// <param name="table">要查询表名，可选项balance，income，cash_flow，indicator，valuation，bank_indicator，security_indicator，insurance_indicator</param>
+        /// <param name="columns">所查字段，为空时则查询所有字段，多个字段中间用,分隔。如id,company_id，columns不能有空格等特殊字符</param>
+        /// <param name="code">证券代码，多个标的使用,分隔</param>
+        /// <param name="date">查询日期2019-03-04或者年度2018或者季度2018q1 2018q2 2018q3 2018q4</param>
+        /// <param name="count">查询条数，最多查询1000条。不填count时按date查询</param>
         /// <returns></returns>
-        public string GetFundamentals()
+        public string GetFundamentals(string table, string columns, string code, string date, int count)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -905,12 +988,17 @@ namespace JQData
             {
                 method = "get_fundamentals",
                 Token,
+                table,
+                columns,
+                code,
+                date,
+                count
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取聚宽因子库中所有因子的信息
+        /// 获取聚宽因子库中所有因子的信息
         /// </summary>
         /// <returns></returns>
         public string GetAllFactors()
@@ -922,17 +1010,21 @@ namespace JQData
             var body = JsonSerializer.Serialize(new
             {
                 method = "get_all_factors",
-                Token,
+                Token
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:聚宽因子库数据
+        /// 聚宽因子库数据
         /// run_query api 是模拟了JQDataSDK run_query方法获取财务、宏观、期权等数据
         /// </summary>
+        /// <param name="table">要查询的数据库和表名，格式为 database + . + tablename 如finance.STK_XR_XD</param>
+        /// <param name="columns">所查字段，为空时则查询所有字段，多个字段中间用,分隔。如id,company_id，columns不能有空格等特殊字符</param>
+        /// <param name="conditions">查询条件，可以为空，格式为report_date#>=#2006-12-01&report_date#<=#2006-12-31，条件内部#号分隔，格式： column # 判断符 # value，多个条件使用&号分隔，表示and，conditions不能有空格等特殊字符</param>
+        /// <param name="count">查询条数，count为空时默认1条，最多查询1000条</param>
         /// <returns></returns>
-        public string GetFactorValues()
+        public string GetFactorValues(string table, string columns, string conditions, int count)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -942,17 +1034,24 @@ namespace JQData
             {
                 method = "run_query",
                 Token,
+                table,
+                columns,
+                conditions,
+                count
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取 Alpha 101 因子
+        /// 获取 Alpha 101 因子
         /// 因子来源： 根据 WorldQuant LLC 发表的论文 101 Formulaic Alphas 中给出的 101 个 Alphas 因子公式，我们将公式编写成了函数，方便大家使用
         /// 
         /// </summary>
+        /// <param name="code">标的代码， 多个标的使用,分隔。建议每次请求的标的都是相同类型。支持最多1000个标的查询</param>
+        /// <param name="func_name"> 查询函数名称，如alpha_001，alpha_002等</param>
+        /// <param name="date">查询日期</param>
         /// <returns></returns>
-        public string GetAlpha101()
+        public string GetAlpha101(string code, string func_name, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -962,16 +1061,22 @@ namespace JQData
             {
                 method = "get_alpha101",
                 Token,
+                code,
+                func_name,
+                date
             });
             var result = PostRequest(body);
             return result;
         }
         /// <summary>
-        /// todo:获取 Alpha 191 因子
+        /// 获取 Alpha 191 因子
         /// 因子来源： 根据国泰君安数量化专题研究报告 - 基于短周期价量特征的多因子选股体系给出了 191 个短周期交易型阿尔法因子。为了方便用户快速调用，我们将所有Alpha191因子基于股票的后复权价格做了完整的计算。用户只需要指定fq='post'即可获取全新计算的因子数据。
         /// </summary>
+        /// <param name="code">标的代码， 多个标的使用,分隔。建议每次请求的标的都是相同类型。支持最多1000个标的查询</param>
+        /// <param name="func_name">查询函数名称，如alpha_001，alpha_002等</param>
+        /// <param name="date">查询日期</param>
         /// <returns></returns>
-        public string GetAlpha191()
+        public string GetAlpha191(string code, string func_name, string date)
         {
             if (string.IsNullOrEmpty(Token))
             {
@@ -981,6 +1086,9 @@ namespace JQData
             {
                 method = "get_alpha191",
                 Token,
+                code,
+                func_name,
+                date
             });
             var result = PostRequest(body);
             return result;
