@@ -3,8 +3,12 @@
   <PropertyGroup>
     <OutputType>library</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Description>joinquant,聚宽数据API封装</Description>
+    <Copyright>ryangle</Copyright>
+    <RepositoryUrl>https://github.com/ryangle/JQData</RepositoryUrl>
+    <PackageTags>Joinquant，聚宽</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
